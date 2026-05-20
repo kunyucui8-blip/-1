@@ -120,6 +120,46 @@ export default function App() {
     }
   };
 
+  // Delete a saving record and revert progress on corresponding challenge
+  const handleDeleteRecord = (recordId: string) => {
+    const recordToDelete = records.find(r => r.id === recordId);
+    
+    // 1. Remove from global records registry
+    setRecords(prev => prev.filter(r => r.id !== recordId));
+
+    // 2. Revert the challenge target savings sum if referenced
+    if (recordToDelete && recordToDelete.challengeId) {
+      setChallenges(prevChallenges => {
+        const updated = prevChallenges.map(c => {
+          if (c.id === recordToDelete.challengeId) {
+            const newCurrent = Math.max(0, c.current - recordToDelete.amount);
+            
+            // Also remove from the challenge object's own mini records list matching this amount and date, or all instances
+            const updatedChallengeRecords = c.records.filter(subRec => 
+              !(subRec.amount === recordToDelete.amount)
+            );
+
+            const challengeUpdated: Challenge = {
+              ...c,
+              current: newCurrent,
+              status: newCurrent >= c.target ? 'COMPLETED' : 'ACTIVE',
+              records: updatedChallengeRecords
+            };
+
+            // Sync the detailView state if we're on it
+            if (detailView && detailView.id === c.id) {
+              setDetailView(challengeUpdated);
+            }
+
+            return challengeUpdated;
+          }
+          return c;
+        });
+        return updated;
+      });
+    }
+  };
+
   // Quick Save numeric logic trigger
   const handleCommitDeposit = (amount: number, challengeId: string, category: string) => {
     const timestampStr = new Date().toLocaleDateString('zh-CN', {
@@ -278,6 +318,7 @@ export default function App() {
                     records={records}
                     onOpenQuickSave={() => setShowQuickSaveOverlay(true)}
                     onNavigateToMe={() => setActiveTab('ME')}
+                    onDeleteRecord={handleDeleteRecord}
                     avatar={profile.avatar}
                   />
                 )}

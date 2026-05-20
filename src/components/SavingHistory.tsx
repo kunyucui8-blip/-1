@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { Bell, SlidersHorizontal, Plus, Compass, Camera, Home, Coins, Coffee, Sparkles, Award, Info, ShieldCheck, Heart, X } from 'lucide-react';
+import { Bell, SlidersHorizontal, Plus, Compass, Camera, Home, Coins, Coffee, Sparkles, Award, Info, ShieldCheck, Heart, X, Trash2 } from 'lucide-react';
 import { SavingRecord } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -12,6 +12,7 @@ interface SavingHistoryProps {
   records: SavingRecord[];
   onOpenQuickSave: () => void;
   onNavigateToMe: () => void;
+  onDeleteRecord: (id: string) => void;
   avatar: string;
 }
 
@@ -19,12 +20,17 @@ export default function SavingHistory({
   records,
   onOpenQuickSave,
   onNavigateToMe,
+  onDeleteRecord,
   avatar
 }: SavingHistoryProps) {
   const [showNotificationModal, setShowNotificationModal] = useState(false);
-  // Aggregate stats dynamically
-  const monthlySum = records.reduce((acc, r) => acc + r.amount, 0);
-  const count = records.length;
+  const [recordToDelete, setRecordToDelete] = useState<SavingRecord | null>(null);
+  const [deletedIds, setDeletedIds] = useState<string[]>([]);
+
+  // Aggregate stats dynamically excluding deleted records
+  const filteredActiveRecords = records.filter(item => !deletedIds.includes(item.id));
+  const monthlySum = filteredActiveRecords.reduce((acc, r) => acc + r.amount, 0);
+  const count = filteredActiveRecords.length;
   
   // Custom comparison formula based on records sum
   const basePastMonthSum = 3000;
@@ -102,6 +108,7 @@ export default function SavingHistory({
   };
 
   const displayedRecords = hasLoadedEarlier ? [...records, ...olderRecords] : records;
+  const filteredRecords = displayedRecords.filter(item => !deletedIds.includes(item.id));
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FAF9F6] relative overflow-hidden">
@@ -195,7 +202,7 @@ export default function SavingHistory({
 
           {/* List items dynamic mapping */}
           <div className="space-y-3 font-sans">
-            {displayedRecords.map((item) => (
+            {filteredRecords.map((item) => (
               <div 
                 key={item.id}
                 className="bg-white rounded-[20px] p-4 shadow-sm border border-brand-secondary/10 flex items-center justify-between transition-transform duration-200 hover:-translate-y-0.5 animate-fadeIn"
@@ -213,14 +220,26 @@ export default function SavingHistory({
                   </div>
                 </div>
 
-                {/* Right financial logs */}
-                <div className="text-right space-y-0.5">
-                  <span className="text-base font-bold text-brand-gold block font-sans">
-                    +¥{item.amount.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}
-                  </span>
-                  <span className="text-[10px] text-zinc-455 bg-brand-cream/60 text-brand-gold/85 rounded-full px-2 py-0.5 font-sans inline-block">
-                    {item.category}
-                  </span>
+                {/* Right financial logs & delete action */}
+                <div className="flex items-center space-x-3 text-right">
+                  <div className="space-y-0.5">
+                    <span className="text-base font-bold text-brand-gold block font-sans">
+                      +¥{item.amount.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}
+                    </span>
+                    <span className="text-[10px] text-zinc-455 bg-brand-cream/60 text-brand-gold/85 rounded-full px-2 py-0.5 font-sans inline-block">
+                      {item.category}
+                    </span>
+                  </div>
+                  
+                  {/* Native popup trigger button */}
+                  <button
+                    id={`btn-delete-record-${item.id}`}
+                    onClick={() => setRecordToDelete(item)}
+                    className="p-1.5 text-rose-500/70 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all active:scale-95 cursor-pointer ml-1"
+                    title="删除记录"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             ))}
@@ -324,6 +343,75 @@ export default function SavingHistory({
               >
                 我知道了，温暖存钱 🌱
               </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Record Confirmation Modal Dialog */}
+      <AnimatePresence>
+        {recordToDelete && (
+          <motion.div 
+            className="fixed inset-0 bg-[#3D3D3D]/50 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div 
+              className="bg-white rounded-3xl p-6 shadow-xl w-full max-w-sm border border-brand-secondary/15 space-y-4 animate-in fade-in zoom-in duration-200"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+            >
+              <div className="flex items-center space-x-2 pb-2 border-b border-brand-cream text-rose-650 font-bold text-base select-none">
+                <span>🗑️</span>
+                <span className="text-rose-600">确认删除记账明细？</span>
+              </div>
+
+              <div className="space-y-2 text-xs text-[#3D3D3D]/90 leading-relaxed font-sans">
+                <p>您确定要永久删除这条存钱账单明细吗？</p>
+                <div className="bg-[#FAF9F6] border border-brand-secondary/15 rounded-xl p-3.5 space-y-1 mt-2">
+                  <div className="flex justify-between font-bold text-xs text-brand-gold">
+                    <span>名 称：</span>
+                    <span>{recordToDelete.title}</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-xs text-brand-gold">
+                    <span>金 额：</span>
+                    <span className="text-rose-600 font-mono">¥{recordToDelete.amount.toLocaleString('zh-CN', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                  <div className="flex justify-between text-[11px] text-zinc-400">
+                    <span>日 期：</span>
+                    <span>{recordToDelete.date}</span>
+                  </div>
+                </div>
+                {recordToDelete.challengeId && (
+                  <p className="text-[10px] text-rose-500/80 mt-2 font-mono">
+                    ⚠️ 提示：此账单与特定存钱挑战计划关联，删除后，该计划内的对应累计钱款额也将自动扣减。
+                  </p>
+                )}
+              </div>
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  id="btn-confirm-delete-cancel"
+                  onClick={() => setRecordToDelete(null)}
+                  className="flex-1 py-2.5 border border-[#ebd5bc]/30 rounded-xl text-center text-xs font-semibold text-brand-dark hover:bg-brand-cream/40 transition cursor-pointer"
+                >
+                  取消
+                </button>
+                <button
+                  id="btn-confirm-delete-submit"
+                  onClick={() => {
+                    const id = recordToDelete.id;
+                    setDeletedIds(prev => [...prev, id]);
+                    onDeleteRecord(id);
+                    setRecordToDelete(null);
+                  }}
+                  className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-center text-xs font-semibold transition cursor-pointer shadow-md"
+                >
+                  确认删除
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
