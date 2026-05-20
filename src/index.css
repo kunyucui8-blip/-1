@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-brand-primary: #FFB347;
+  --color-brand-gold: #845400;
+  --color-brand-dark: #3D3D3D;
+  --color-brand-cream: #FAF9F6;
+  --color-brand-background: #FAF9F6;
+  --color-brand-secondary: #ebd5bc;
+  --color-brand-sage: #A8D5BA;
+}
+
+body {
+  background-color: #FAF9F6;
+  color: #3D3D3D;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Liquid Wave animations for Jar Progress component */
+@keyframes wave1 {
+  0% { transform: translate(-50%, 0) rotate(0deg); }
+  100% { transform: translate(-50%, 0) rotate(360deg); }
+}
+
+@keyframes wave2 {
+  0% { transform: translate(-50%, 0) rotate(0deg); }
+  100% { transform: translate(-50%, 0) rotate(360deg); }
+}
+
+.liquid-wave-1 {
+  animation: wave1 8s infinite linear;
+}
+
+.liquid-wave-2 {
+  animation: wave2 12s infinite linear;
+}

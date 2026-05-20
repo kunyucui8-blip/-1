@@ -1,0 +1,8 @@
+{
+  "name": "Remix: 存钱挑战",
+  "description": "一款温暖有趣的个人财务储蓄与存钱挑战应用，包含大理之旅、首付储备等存钱计划与交互式快速存入功能。",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
