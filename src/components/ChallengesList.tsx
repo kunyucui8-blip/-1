@@ -72,9 +72,9 @@ export default function ChallengesList({
   };
 
   return (
-    <div className="bg-[#FAF9F6] min-h-screen flex flex-col justify-between pb-24 relative">
+    <div className="w-full h-full flex flex-col bg-[#FAF9F6] relative overflow-hidden">
       {/* Header Panel */}
-      <div className="flex items-center justify-between px-4 py-4 sticky top-0 bg-[#FAF9F6]/90 backdrop-blur-md z-15 select-none">
+      <div className="flex items-center justify-between px-4 py-4 bg-[#FAF9F6]/90 border-b border-brand-secondary/10 shrink-0 select-none">
         <div className="flex items-center space-x-2">
           {/* Logo element resembling top banner header */}
           <div className="w-8 h-8 rounded-full bg-brand-primary/15 flex items-center justify-center text-brand-gold font-bold">
@@ -91,8 +91,8 @@ export default function ChallengesList({
         </button>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="px-5 space-y-5 flex-1 max-w-sm mx-auto w-full pt-2">
+      {/* Filter Tabs & Scroll Area */}
+      <div className="px-5 space-y-5 flex-1 overflow-y-auto max-w-sm mx-auto w-full pt-3 pb-32">
         {/* Toggle options buttons */}
         <div className="flex bg-brand-cream/65 rounded-xl p-1 shadow-inner border border-brand-secondary/15 select-none">
           <button

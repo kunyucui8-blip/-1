@@ -120,9 +120,9 @@ export default function ChallengeDetail({
   ];
 
   return (
-    <div className="bg-[#FAF9F6] min-h-screen flex flex-col justify-between pb-6 relative">
+    <div className="w-full h-full flex flex-col bg-[#FAF9F6] relative overflow-hidden">
       {/* Header Panel */}
-      <div className="flex items-center justify-between px-4 py-4 sticky top-0 bg-[#FAF9F6]/90 backdrop-blur-md z-10 select-none">
+      <div className="flex items-center justify-between px-4 py-4 bg-[#FAF9F6]/90 border-b border-brand-secondary/10 shrink-0 select-none">
         <button 
           id="btn-back-to-goals"
           onClick={onBack} 
@@ -209,7 +209,7 @@ export default function ChallengeDetail({
       </div>
 
       {/* Main Flow Content Container */}
-      <div className="flex-1 px-5 space-y-6 pb-20 max-w-sm mx-auto w-full">
+      <div className="flex-1 px-5 space-y-6 pb-28 overflow-y-auto max-w-sm mx-auto w-full pt-3">
         {/* Visual Glass Jar Indicator Card */}
         <div className="bg-white rounded-[24px] p-6 shadow-sm border border-brand-secondary/15 relative flex flex-col items-center">
           {/* Badge Completeness on Top Right */}
@@ -333,7 +333,7 @@ export default function ChallengeDetail({
       </div>
 
       {/* Floating Bottom action button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#FAF9F6] via-[#FAF9F6]/95 to-transparent z-15 flex justify-center">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#FAF9F6] via-[#FAF9F6]/95 to-transparent z-15 flex justify-center">
         <button
           id="btn-detail-save-now-cta"
           onClick={onOpenQuickSave}

@@ -29,9 +29,9 @@ export default function ChallengeCompleted({
   };
 
   return (
-    <div className="bg-[#FAF9F6] min-h-screen flex flex-col justify-between pb-6 relative">
+    <div className="w-full h-full flex flex-col bg-[#FAF9F6] relative overflow-hidden pb-6">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 sticky top-0 bg-[#FAF9F6]/90 backdrop-blur-md z-10">
+      <div className="flex items-center justify-between px-4 py-4 bg-[#FAF9F6]/90 border-b border-brand-secondary/10 shrink-0 select-none">
         <button 
           id="btn-back-completed-view"
           onClick={onBack} 
@@ -45,8 +45,8 @@ export default function ChallengeCompleted({
         </button>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 px-5 space-y-8 pb-4 max-w-md mx-auto w-full">
+      {/* Main Content Area & Scroll Area */}
+      <div className="flex-1 px-5 space-y-8 pb-4 overflow-y-auto max-w-md mx-auto w-full pt-3">
         {/* Giant Trophy Header & Celebration */}
         <div className="flex flex-col items-center text-center space-y-4 pt-4">
           <div className="relative">

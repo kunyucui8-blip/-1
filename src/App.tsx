@@ -206,12 +206,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#3D3D3D] flex flex-col items-center justify-start select-none w-full relative">
+    <div className="h-screen bg-[#FAF9F6] text-[#3D3D3D] flex flex-col items-center justify-start select-none w-full relative overflow-hidden">
       {/* Outer wrapper max width frame of 480px representing beautiful mobile card style */}
-      <div className="w-full max-w-[480px] min-h-screen bg-[#FAF9F6] shadow-2xl shadow-brand-gold/10 border-x border-brand-secondary/15 flex flex-col justify-between relative overflow-hidden">
+      <div className="w-full max-w-[480px] h-screen max-h-screen bg-[#FAF9F6] shadow-2xl shadow-brand-gold/10 border-x border-brand-secondary/15 flex flex-col justify-between relative overflow-hidden">
         
         {/* Pages Content View Switch (Slide / fade layout) */}
-        <div className="flex-1 w-full relative">
+        <div className="flex-1 w-full relative overflow-hidden">
           <AnimatePresence mode="wait">
             {completedCelebrationView ? (
               <motion.div

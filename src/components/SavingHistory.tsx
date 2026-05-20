@@ -104,9 +104,9 @@ export default function SavingHistory({
   const displayedRecords = hasLoadedEarlier ? [...records, ...olderRecords] : records;
 
   return (
-    <div className="bg-[#FAF9F6] min-h-screen flex flex-col justify-between pb-24 relative">
+    <div className="w-full h-full flex flex-col bg-[#FAF9F6] relative overflow-hidden">
       {/* Sticky Header */}
-      <div className="flex items-center justify-between px-4 py-4 sticky top-0 bg-[#FAF9F6]/90 backdrop-blur-md z-15 select-none">
+      <div className="flex items-center justify-between px-4 py-4 bg-[#FAF9F6]/90 border-b border-brand-secondary/10 shrink-0 select-none">
         <div className="flex items-center space-x-2.5">
           {/* Circular mini avatar leading to Personal Center */}
           <button 
@@ -133,8 +133,8 @@ export default function SavingHistory({
         </button>
       </div>
 
-      {/* Main Stats Summary Block */}
-      <div className="px-5 space-y-6 flex-1 max-w-sm mx-auto w-full">
+      {/* Main Stats Summary Block & Scroll Area */}
+      <div className="px-5 space-y-6 flex-1 overflow-y-auto max-w-sm mx-auto w-full pt-3 pb-32">
         {/* Core summary metrics card */}
         <div className="bg-white rounded-[24px] p-6 shadow-sm border border-brand-secondary/15 space-y-5">
           <div className="flex justify-between items-start">
